@@ -1,7 +1,6 @@
-**/*.map
 .git
 .gitignore
 .vscode/**
-*.vsix
 node_modules/**
-README.md
+*.vsix
+*.log

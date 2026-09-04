@@ -1,34 +1,63 @@
 # SSH Connection Sound
 
-A lightweight VS Code extension for playing local desktop sounds when a
+A cross-platform VS Code extension that plays sounds when a
 Remote-SSH connection succeeds or disconnects.
 
-## Default sounds
+The extension runs as a **UI extension**, so sound playback happens
+on your local computer rather than on the remote SSH server.
 
-- Success: `/usr/share/sounds/freedesktop/stereo/complete.oga`
-- Failure: `/usr/share/sounds/freedesktop/stereo/dialog-error.oga`
-- Disconnect: `/usr/share/sounds/freedesktop/stereo/service-logout.oga`
+## Features
 
-## Installation
+- Remote-SSH connection success sound
+- Remote-SSH disconnect sound
+- Failure sound test command
+- Success sound test command
+- Disconnect sound test command
+- Windows support
+- macOS support
+- Linux support
+- Custom sound files
+- Native OS fallback sounds
+- No external npm runtime dependencies
+- Configurable polling interval
 
-```bash
-npm install -g @vscode/vsce
-cd ~/vscode-ssh-sound
-vsce package
-code --install-extension ssh-connection-sound-0.0.2.vsix
-```
+## Supported Operating Systems
 
-Reload VS Code after installation.
+### Windows
 
-## Important
+Supported versions:
 
-The sounds are played on the local machine running VS Code, not on the SSH
-server.
+- Windows 10
+- Windows 11
 
-Failure detection depends on messages exposed by VS Code/Remote-SSH. The
-Remote-SSH API does not provide a general public `connectionFailed` event, so
-failure detection cannot be guaranteed for every possible failure mode.
+Windows uses native `.NET SystemSounds` by default.
 
-## License
+Custom sound files can be configured as `.wav` files.
 
-MIT
+### macOS
+
+Supported versions:
+
+- macOS
+
+macOS uses the built-in `afplay` utility and system sounds.
+
+### Linux
+
+Supported distributions include:
+
+- Ubuntu
+- Debian
+- Fedora
+- Arch Linux
+- Other Linux distributions with `paplay`, `aplay`,
+  `ffplay`, or `canberra-gtk-play`
+
+The extension checks several common Linux sound locations.
+
+## How It Works
+
+The extension monitors:
+
+```text
+vscode.env.remoteName

@@ -1,0 +1,54 @@
+{
+    "windows": {
+        "success": {
+            "type": "system",
+            "sound": "Asterisk"
+        },
+        "failure": {
+            "type": "system",
+            "sound": "Hand"
+        },
+        "disconnect": {
+            "type": "system",
+            "sound": "Exclamation"
+        }
+    },
+    "macos": {
+        "success": {
+            "type": "file",
+            "path": "/System/Library/Sounds/Glass.aiff"
+        },
+        "failure": {
+            "type": "file",
+            "path": "/System/Library/Sounds/Basso.aiff"
+        },
+        "disconnect": {
+            "type": "file",
+            "path": "/System/Library/Sounds/Submarine.aiff"
+        }
+    },
+    "linux": {
+        "success": {
+            "type": "file",
+            "paths": [
+                "/usr/share/sounds/freedesktop/stereo/complete.oga",
+                "/usr/share/sounds/freedesktop/stereo/message-new-instant.oga",
+                "/usr/share/sounds/freedesktop/stereo/dialog-information.oga"
+            ]
+        },
+        "failure": {
+            "type": "file",
+            "paths": [
+                "/usr/share/sounds/freedesktop/stereo/dialog-error.oga",
+                "/usr/share/sounds/freedesktop/stereo/dialog-warning.oga"
+            ]
+        },
+        "disconnect": {
+            "type": "file",
+            "paths": [
+                "/usr/share/sounds/freedesktop/stereo/service-logout.oga",
+                "/usr/share/sounds/freedesktop/stereo/device-removed.oga"
+            ]
+        }
+    }
+}
