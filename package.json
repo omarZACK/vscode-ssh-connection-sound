@@ -2,7 +2,7 @@
   "name": "ssh-connection-sound",
   "displayName": "SSH Connection Sound",
   "description": "Plays sounds for Remote-SSH connection success, failure, and disconnect events.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "omarZACK",
   "license": "MIT",
   "engines": {
@@ -26,12 +26,6 @@
     "url": "https://github.com/omarZACK/vscode-ssh-connection-sound/issues"
   },
   "homepage": "https://github.com/omarZACK/vscode-ssh-connection-sound#readme",
-  "files": [
-    "extension.js",
-    "sounds.json",
-    "README.md",
-    "LICENSE"
-  ],
   "contributes": {
     "configuration": {
       "title": "SSH Connection Sound",
