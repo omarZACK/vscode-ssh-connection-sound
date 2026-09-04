@@ -1,0 +1,44 @@
+{
+  "name": "ssh-connection-sound",
+  "displayName": "SSH Connection Sound",
+  "description": "Plays sounds for SSH connection success, failure, and disconnect events.",
+  "version": "0.0.1",
+  "publisher": "omarwawy",
+  "engines": {
+    "vscode": "^1.136.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "SSH Connection Sound",
+      "properties": {
+        "sshConnectionSound.successSound": {
+          "type": "string",
+          "default": "/usr/share/sounds/freedesktop/stereo/complete.oga",
+          "description": "Sound played when an SSH connection succeeds."
+        },
+        "sshConnectionSound.failureSound": {
+          "type": "string",
+          "default": "/usr/share/sounds/freedesktop/stereo/dialog-error.oga",
+          "description": "Sound played when an SSH connection fails."
+        },
+        "sshConnectionSound.disconnectSound": {
+          "type": "string",
+          "default": "/usr/share/sounds/freedesktop/stereo/service-logout.oga",
+          "description": "Sound played when an SSH connection is disconnected."
+        },
+        "sshConnectionSound.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable SSH connection sounds."
+        }
+      }
+    }
+  }
+}
