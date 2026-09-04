@@ -25,14 +25,22 @@ jobs:
               with:
                   node-version: 22
 
+            - name: Install dependencies
+              run: npm install
+
             - name: Validate package.json
-              run: node -e "JSON.parse(require('fs').readFileSync('package.json', 'utf8')); console.log('package.json is valid')"
+              run: |
+                  node -e "JSON.parse(require('fs').readFileSync('package.json', 'utf8')); console.log('package.json is valid')"
 
             - name: Validate sounds.json
-              run: node -e "JSON.parse(require('fs').readFileSync('sounds.json', 'utf8')); console.log('sounds.json is valid')"
+              run: |
+                  node -e "JSON.parse(require('fs').readFileSync('config/sounds.json', 'utf8')); console.log('sounds.json is valid')"
 
-            - name: Check extension.js syntax
-              run: node --check extension.js
+            - name: Check JavaScript syntax
+              run: npm run check
+
+            - name: Run tests
+              run: npm test
 
             - name: Install VSCE
               run: npm install --global @vscode/vsce

@@ -1,53 +1,62 @@
 name: Release VS Code Extension
 
 on:
-  push:
-    tags:
-      - "v*"
+    push:
+        tags:
+            - "v*"
 
 permissions:
-  contents: write
+    contents: write
 
 jobs:
-  release:
-    name: Build and Release VSIX
-    runs-on: ubuntu-latest
+    release:
+        name: Build and Release VSIX
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
 
-      - name: Install VSCE
-        run: npm install --global @vscode/vsce
+            - name: Install dependencies
+              run: npm install
 
-      - name: Verify package version
-        shell: bash
-        run: |
-          TAG_VERSION="${GITHUB_REF_NAME#v}"
-          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
+            - name: Install VSCE
+              run: npm install --global @vscode/vsce
 
-          echo "Git tag version: $TAG_VERSION"
-          echo "package.json version: $PACKAGE_VERSION"
+            - name: Verify package version
+              shell: bash
+              run: |
+                  TAG_VERSION="${GITHUB_REF_NAME#v}"
+                  PACKAGE_VERSION="$(node -p "require('./package.json').version")"
 
-          if [ "$TAG_VERSION" != "$PACKAGE_VERSION" ]; then
-            echo "ERROR: Git tag and package.json versions do not match."
-            exit 1
-          fi
+                  echo "Git tag version: $TAG_VERSION"
+                  echo "package.json version: $PACKAGE_VERSION"
 
-      - name: Package VSIX
-        run: vsce package
+                  if [ "$TAG_VERSION" != "$PACKAGE_VERSION" ]; then
+                    echo "ERROR: Git tag and package.json versions do not match."
+                    exit 1
+                  fi
 
-      - name: List release files
-        run: ls -lh *.vsix
+            - name: Validate JavaScript
+              run: npm run check
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          name: SSH Connection Sound v${{ github.ref_name }}
-          generate_release_notes: true
-          files: "*.vsix"
+            - name: Run tests
+              run: npm test
+
+            - name: Package VSIX
+              run: vsce package
+
+            - name: List release files
+              run: ls -lh *.vsix
+
+            - name: Create GitHub Release
+              uses: softprops/action-gh-release@v2
+              with:
+                  name: SSH Connection Sound ${{ github.ref_name }}
+                  generate_release_notes: true
+                  files: "*.vsix"

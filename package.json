@@ -1,11 +1,10 @@
 {
     "name": "ssh-connection-sound",
     "displayName": "SSH Connection Sound",
-    "description": "Plays sounds for Remote-SSH connection success, failure, and disconnect events.",
-    "version": "0.0.3",
+    "description": "Plays sounds for Remote-SSH connection success, failure testing, and disconnect events.",
+    "version": "0.0.4",
     "publisher": "omarZACK",
     "license": "MIT",
-    "icon": "icon.png",
     "engines": {
         "vscode": "^1.136.0"
     },
@@ -18,7 +17,8 @@
     "activationEvents": [
         "onStartupFinished"
     ],
-    "main": "./extension.js",
+    "main": "./src/extension.js",
+    "icon": "assets/icon.png",
     "repository": {
         "type": "git",
         "url": "https://github.com/omarZACK/vscode-ssh-connection-sound.git"
@@ -39,7 +39,7 @@
                 "sshConnectionSound.soundsFile": {
                     "type": "string",
                     "default": "",
-                    "description": "Optional path to a custom sounds.json file. Leave empty to use the sounds.json bundled with the extension."
+                    "description": "Optional path to a custom sounds.json file. Leave empty to use the bundled configuration."
                 },
                 "sshConnectionSound.pollInterval": {
                     "type": "number",
@@ -69,7 +69,12 @@
         ]
     },
     "scripts": {
+        "test": "node --test",
+        "check": "node --check src/extension.js && node --check src/audio/player.js && node --check src/audio/linux.js && node --check src/audio/macos.js && node --check src/audio/windows.js && node --check src/config/loader.js && node --check src/remote/monitor.js",
         "package": "vsce package",
         "publish": "vsce publish"
+    },
+    "devDependencies": {
+        "@vscode/vsce": "^3.6.0"
     }
 }

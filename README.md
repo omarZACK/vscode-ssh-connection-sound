@@ -487,17 +487,41 @@ code --install-extension ./ssh-connection-sound-X.Y.Z.vsix
 ## Project Structure
 
 ```text
-vscode-ssh-connection-sound/
+vscode-ssh-sound/
 │
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml
 │       └── release.yml
 │
-├── extension.js
-├── sounds.json
+├── .vscode/
+│   ├── extensions.json
+│   └── launch.json
+│
+├── assets/
+│   └── icon.png
+│
+├── config/
+│   └── sounds.json
+│
+├── src/
+│   ├── extension.js
+│   ├── audio/
+│   │   ├── player.js
+│   │   ├── linux.js
+│   │   ├── macos.js
+│   │   └── windows.js
+│   ├── config/
+│   │   └── loader.js
+│   └── remote/
+│       └── monitor.js
+│
+├── test/
+│   └── extension.test.js
+│
 ├── package.json
 ├── README.md
+├── CHANGELOG.md
 ├── LICENSE
 ├── .gitignore
 └── .vscodeignore
