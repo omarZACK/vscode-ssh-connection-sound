@@ -1,160 +1,186 @@
 # SSH Connection Sound
 
-[![CI](https://github.com/omarZACK/vscode-ssh-connection-sound/actions/workflows/ci.yml/badge.svg)](https://github.com/omarZACK/vscode-ssh-connection-sound/actions/workflows/ci.yml)
-[![Latest Release](https://img.shields.io/github/v/release/omarZACK/vscode-ssh-connection-sound)](https://github.com/omarZACK/vscode-ssh-connection-sound/releases/latest)
-[![License](https://img.shields.io/github/license/omarZACK/vscode-ssh-connection-sound)](https://github.com/omarZACK/vscode-ssh-connection-sound/blob/main/LICENSE)
+Play audio notifications when a VS Code Remote-SSH connection is established or disconnected.
 
-A cross-platform VS Code extension that plays sounds for
-**Remote-SSH connection success, failure testing, and disconnect events**.
-
-The extension runs as a **UI extension**, so sound playback happens on
-your local computer rather than on the remote SSH server.
-
----
+The extension runs on the **local machine** so sounds are played through your local speakers/headphones rather than on the remote SSH server.
 
 ## Features
 
-- Remote-SSH connection success sound
-- Remote-SSH disconnect sound
-- Success sound test command
-- Failure sound test command
-- Disconnect sound test command
-- Reload sounds configuration without restarting VS Code
-- Windows support
-- macOS support
-- Linux support
-- Custom sound configuration
-- Native operating-system sound support
-- Multiple Linux playback backends
-- Configurable polling interval
-- No external runtime npm dependencies
-- Runs locally when using Remote-SSH
+- Play a sound when a Remote-SSH connection succeeds.
+- Play a sound when a Remote-SSH connection disconnects.
+- Manually test success, failure, and disconnect sounds.
+- Cross-platform support: Windows, macOS, and Linux.
+- Configurable sounds through a JSON file.
+- Support for custom sound configuration files.
+- Configurable Remote-SSH state polling interval.
+- Reload sound configuration without restarting VS Code.
+- Lightweight implementation with no runtime npm dependencies.
+- Runs as a UI extension so audio playback happens locally.
 
----
+## Requirements
 
-## Download
+- Visual Studio Code `1.136.0` or later.
+- VS Code Remote - SSH extension for Remote-SSH functionality.
 
-### Latest VSIX
-
-[![Download Latest VSIX](https://img.shields.io/github/v/release/omarZACK/vscode-ssh-connection-sound?label=Download%20VSIX)](https://github.com/omarZACK/vscode-ssh-connection-sound/releases/latest)
-
-Download the latest `.vsix` package from the
-**[GitHub Releases](https://github.com/omarZACK/vscode-ssh-connection-sound/releases/latest)** page.
-
-The release assets contain the installable VS Code extension:
-
-```text
-ssh-connection-sound-X.Y.Z.vsix
-```
-
----
-
-## Installation
-
-### Option 1 — Install the VSIX from the terminal
-
-After downloading the `.vsix` file:
-
-```bash
-code --install-extension ssh-connection-sound-0.0.3.vsix
-```
-
-### Option 2 — Install from VS Code
-
-1. Open VS Code.
-2. Open the **Extensions** view.
-3. Click the `...` menu.
-4. Select **Install from VSIX...**
-5. Select the downloaded `.vsix` file.
-6. Reload VS Code if requested.
-
----
-
-## Supported Operating Systems
-
-### Windows
-
-Supported:
-
-- Windows 10
-- Windows 11
-
-Windows uses native `.NET SystemSounds` for configured system sounds.
-
-Custom sound files can also be configured as `.wav` files.
-
----
-
-### macOS
-
-macOS uses the built-in:
-
-```text
-afplay
-```
-
-System sound files can be configured using `.aiff` files.
-
----
-
-### Linux
-
-The extension supports common Linux audio playback utilities:
+For Linux, at least one supported audio playback utility should be available:
 
 - `paplay`
 - `aplay`
 - `ffplay`
 - `canberra-gtk-play`
 
-It also checks several common locations for desktop notification sounds.
+Windows and macOS use native audio playback facilities.
 
-Supported distributions include:
+## Installation
 
-- Ubuntu
-- Debian
-- Fedora
-- Arch Linux
-- Other Linux distributions with a supported audio playback utility
+### From the VS Code Marketplace
 
----
+Open VS Code and search for:
 
-## How It Works
+**SSH Connection Sound**
 
-The extension monitors the VS Code remote environment:
+The extension identifier is:
 
-```javascript
-vscode.env.remoteName;
+```text
+omarZACK.ssh-connection-sound
 ```
 
-When VS Code enters a Remote-SSH environment, the extension detects the SSH connection and plays the configured success sound.
+### From a VSIX file
 
-When the Remote-SSH environment disappears, the extension detects the disconnect and plays the configured disconnect sound.
+```bash
+code --install-extension ./ssh-connection-sound-0.0.4.vsix
+```
 
-The extension is configured as a UI extension:
+To force reinstall:
+
+```bash
+code --install-extension ./ssh-connection-sound-0.0.4.vsix --force
+```
+
+## Usage
+
+Once installed, the extension activates automatically.
+
+When VS Code enters a Remote-SSH session, the extension detects the connection and plays the configured **success** sound.
+
+When the Remote-SSH session is disconnected, the extension plays the configured **disconnect** sound.
+
+### Test the sounds
+
+Open the Command Palette with `Ctrl+Shift+P` on Windows/Linux or `Cmd+Shift+P` on macOS.
+
+Search for:
+
+```text
+SSH Connection Sound
+```
+
+Available commands:
+
+- `SSH Connection Sound: Test Success Sound`
+- `SSH Connection Sound: Test Failure Sound`
+- `SSH Connection Sound: Test Disconnect Sound`
+- `SSH Connection Sound: Reload Sounds`
+
+The failure sound is currently a **manual test event**. The VS Code extension API does not provide a stable public API exposing every internal Remote-SSH connection failure, so automatic detection of all SSH failures is not guaranteed.
+
+## Configuration
+
+Open **Settings** and search for `SSH Connection Sound`.
+
+### Enable or disable sounds
+
+Setting:
+
+```text
+sshConnectionSound.enabled
+```
+
+Default:
 
 ```json
-"extensionKind": [
-  "ui"
-]
+true
 ```
 
-This is important because the extension needs to play audio through the **local computer's audio system**.
+Disable all audio notifications:
 
-The remote SSH server does not need to have the sound files or audio playback utilities installed.
+```json
+{
+    "sshConnectionSound.enabled": false
+}
+```
 
----
+### Custom sounds configuration
+
+Setting:
+
+```text
+sshConnectionSound.soundsFile
+```
+
+By default, the extension uses:
+
+```text
+config/sounds.json
+```
+
+You can provide your own configuration file:
+
+```json
+{
+    "sshConnectionSound.soundsFile": "/home/omar/.config/ssh-connection-sound/sounds.json"
+}
+```
+
+A `~/` path is also supported:
+
+```json
+{
+    "sshConnectionSound.soundsFile": "~/.config/ssh-connection-sound/sounds.json"
+}
+```
+
+After changing the configuration, run:
+
+```text
+SSH Connection Sound: Reload Sounds
+```
+
+### Polling interval
+
+Setting:
+
+```text
+sshConnectionSound.pollInterval
+```
+
+Default:
+
+```text
+500
+```
+
+The value is specified in milliseconds.
+
+For example:
+
+```json
+{
+    "sshConnectionSound.pollInterval": 250
+}
+```
+
+The minimum supported value is `100 ms`.
 
 ## Sound Configuration
 
-Sound configuration is stored in:
+The bundled configuration is:
 
 ```text
-sounds.json
+config/sounds.json
 ```
 
-The bundled configuration contains platform-specific sounds.
-
-Example structure:
+Example:
 
 ```json
 {
@@ -215,295 +241,104 @@ Example structure:
 }
 ```
 
----
+### File sounds
 
-## Custom Sounds
-
-You can provide your own `sounds.json` file.
-
-In VS Code settings, configure:
-
-```text
-SSH Connection Sound: Sounds File
-```
-
-or use:
+Use:
 
 ```json
 {
-    "sshConnectionSound.soundsFile": "/path/to/your/sounds.json"
+    "type": "file",
+    "path": "/path/to/sound.wav"
 }
 ```
 
-The extension also supports:
-
-```text
-~/path/to/sounds.json
-```
-
-and relative paths.
-
-After changing the file, use:
-
-```text
-SSH Connection Sound: Reload Sounds
-```
-
-to reload the configuration.
-
----
-
-## VS Code Settings
-
-The extension provides the following settings.
-
-### Enable or Disable Sounds
-
-Setting:
-
-```text
-sshConnectionSound.enabled
-```
-
-Default:
-
-```json
-true
-```
-
-Example:
+For fallback files:
 
 ```json
 {
-    "sshConnectionSound.enabled": true
+    "type": "file",
+    "paths": ["/path/to/primary.wav", "/path/to/fallback.wav"]
 }
 ```
 
----
+The extension checks the files in order and uses the first existing file.
 
-### Custom Sounds File
+### Windows system sounds
 
-Setting:
-
-```text
-sshConnectionSound.soundsFile
-```
-
-Default:
-
-```text
-""
-```
-
-An empty value uses the bundled `sounds.json`.
-
-Example:
+Windows supports system sounds using:
 
 ```json
 {
-    "sshConnectionSound.soundsFile": "/home/user/.config/ssh-sounds.json"
+    "type": "system",
+    "sound": "Asterisk"
 }
 ```
 
----
-
-### Polling Interval
-
-Setting:
+Examples include:
 
 ```text
-sshConnectionSound.pollInterval
+Asterisk
+Beep
+Exclamation
+Hand
+Question
 ```
 
-Default:
+## Platform Audio Backends
+
+### Windows
+
+Implementation:
 
 ```text
-500
+src/audio/windows.js
 ```
 
-The value is specified in milliseconds.
+System sounds use `System.Media.SystemSounds`.
 
-Example:
+File-based sounds use `System.Media.SoundPlayer`.
 
-```json
-{
-    "sshConnectionSound.pollInterval": 500
-}
-```
+### macOS
 
-The minimum supported value is:
+Implementation:
 
 ```text
-100 ms
+src/audio/macos.js
 ```
 
----
-
-## Commands
-
-Open the VS Code Command Palette:
+Audio files are played using:
 
 ```text
-Ctrl+Shift+P
+afplay
 ```
 
-or on macOS:
+### Linux
+
+Implementation:
 
 ```text
-Cmd+Shift+P
+src/audio/linux.js
 ```
 
-Available commands:
-
-### Test Success Sound
+The extension checks for supported playback utilities in this order:
 
 ```text
-SSH Connection Sound: Test Success Sound
+paplay
+aplay
+ffplay
+canberra-gtk-play
 ```
 
-Immediately tests the configured success sound.
+The first available player is used.
 
----
-
-### Test Failure Sound
-
-```text
-SSH Connection Sound: Test Failure Sound
-```
-
-Immediately tests the configured failure sound.
-
----
-
-### Test Disconnect Sound
-
-```text
-SSH Connection Sound: Test Disconnect Sound
-```
-
-Immediately tests the configured disconnect sound.
-
----
-
-### Reload Sounds
-
-```text
-SSH Connection Sound: Reload Sounds
-```
-
-Reloads the configured `sounds.json` file.
-
-This allows sound configuration changes without restarting VS Code.
-
----
-
-## Remote-SSH Usage
-
-Install the extension on your local VS Code installation.
-
-Then connect to a remote machine using:
-
-```text
-Remote-SSH: Connect to Host...
-```
-
-The extension runs locally and monitors the VS Code remote environment.
-
-Example:
-
-```text
-Local Computer
-│
-├── VS Code
-│   └── SSH Connection Sound
-│
-└── Audio Output
-    └── Speakers / Headphones
-            │
-            │
-            ▼
-       Remote SSH Server
-```
-
-The audio is played locally.
-
-You do not need to install this extension separately on the remote server.
-
----
-
-## Failure Detection
-
-VS Code's public extension API does not expose the complete internal
-Remote-SSH connection log stream.
-
-Therefore, the extension can reliably detect:
-
-- Remote-SSH connection success
-- Remote-SSH disconnect
-
-The failure sound is available through the test command.
-
-Automatic detection of every possible Remote-SSH failure is not guaranteed
-because Remote-SSH's internal connection logs are not exposed as a stable
-public VS Code API.
-
----
-
-## Development
-
-Clone the repository:
-
-```bash
-git clone https://github.com/omarZACK/vscode-ssh-connection-sound.git
-cd vscode-ssh-connection-sound
-```
-
-Install the VS Code Extension Manager:
-
-```bash
-npm install -g @vscode/vsce
-```
-
-Package the extension:
-
-```bash
-vsce package
-```
-
-This generates:
-
-```text
-ssh-connection-sound-X.Y.Z.vsix
-```
-
-Install the local package:
-
-```bash
-code --install-extension ./ssh-connection-sound-X.Y.Z.vsix
-```
-
----
-
-## Project Structure
+## Architecture
 
 ```text
 vscode-ssh-sound/
-│
-├── .github/
-│   └── workflows/
-│       ├── ci.yml
-│       └── release.yml
-│
-├── .vscode/
-│   ├── extensions.json
-│   └── launch.json
-│
 ├── assets/
 │   └── icon.png
-│
 ├── config/
 │   └── sounds.json
-│
 ├── src/
 │   ├── extension.js
 │   ├── audio/
@@ -515,141 +350,437 @@ vscode-ssh-sound/
 │   │   └── loader.js
 │   └── remote/
 │       └── monitor.js
-│
 ├── test/
 │   └── extension.test.js
-│
-├── package.json
-├── README.md
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       └── release.yml
+├── .vscode/
+│   ├── extensions.json
+│   └── launch.json
 ├── CHANGELOG.md
 ├── LICENSE
-├── .gitignore
-└── .vscodeignore
+├── package.json
+└── README.md
 ```
 
----
+### Extension entry point
+
+```text
+src/extension.js
+```
+
+Responsible for activation, configuration loading, audio initialization, command registration, Remote-SSH monitoring, and cleanup.
+
+### Audio player
+
+```text
+src/audio/player.js
+```
+
+Provides a common interface for `success`, `failure`, and `disconnect` events and selects the appropriate platform backend.
+
+### Configuration loader
+
+```text
+src/config/loader.js
+```
+
+Loads and validates `sounds.json`, resolves custom paths, expands `~/`, and selects the current platform configuration.
+
+### Remote monitor
+
+```text
+src/remote/monitor.js
+```
+
+Monitors `vscode.env.remoteName` and detects transitions into and out of the Remote-SSH environment.
+
+## Why the Extension Runs Locally
+
+The extension declares:
+
+```json
+"extensionKind": [
+  "ui"
+]
+```
+
+This ensures that audio playback is performed on the local computer rather than the remote SSH server.
+
+```text
+┌──────────────────────────────┐
+│       Local Computer         │
+│                              │
+│  VS Code                     │
+│    │                         │
+│    ├── SSH Connection Sound  │
+│    │                         │
+│    └── Local Audio Output    │
+│              │               │
+│              ▼               │
+│       Speakers / Headphones  │
+└──────────────┬───────────────┘
+               │
+               │ SSH
+               ▼
+┌──────────────────────────────┐
+│        Remote Server         │
+│                              │
+│        SSH Session           │
+└──────────────────────────────┘
+```
+
+## Development
+
+Clone the repository:
+
+```bash
+git clone https://github.com/omarZACK/vscode-ssh-connection-sound.git
+cd vscode-ssh-connection-sound
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+## Run in Extension Development Host
+
+Open the project:
+
+```bash
+code .
+```
+
+Then use **Run and Debug** and select:
+
+```text
+Run SSH Connection Sound
+```
+
+This launches a VS Code Extension Development Host with the extension loaded.
+
+## Testing
+
+Run:
+
+```bash
+npm test
+```
+
+Current tests cover:
+
+- Home-directory path expansion.
+- Absolute path handling.
+- Missing platform configuration.
+- Valid Linux sound configuration.
+
+## Syntax Checking
+
+Run:
+
+```bash
+npm run check
+```
+
+## Package the Extension
+
+Run:
+
+```bash
+npx vsce package
+```
+
+This generates a VSIX file such as:
+
+```text
+ssh-connection-sound-0.0.4.vsix
+```
+
+## Inspect the VSIX
+
+Before publishing:
+
+```bash
+npx vsce ls
+```
+
+This verifies which files will be included in the package.
+
+## Install the Local VSIX
+
+```bash
+code --install-extension ./ssh-connection-sound-0.0.4.vsix --force
+```
 
 ## GitHub Actions
 
-The repository uses GitHub Actions for automated validation and releases.
-
 ### Continuous Integration
 
-The CI workflow validates:
-
-- `package.json`
-- `sounds.json`
-- `extension.js`
-- VSIX packaging
-
-It runs on pushes to `main` and pull requests targeting `main`.
-
-### Releases
-
-A release is created automatically when a version tag is pushed:
-
 ```text
-v0.0.3
-v0.0.4
-v0.1.0
-...
+.github/workflows/ci.yml
 ```
 
-The release workflow:
+The CI workflow runs on pushes to `main` and pull requests targeting `main`.
 
-1. Checks out the repository.
-2. Installs Node.js.
-3. Installs `vsce`.
-4. Verifies that the Git tag matches `package.json`.
-5. Builds the `.vsix`.
-6. Creates a GitHub Release.
-7. Uploads the `.vsix` as a release asset.
-8. Generates GitHub release notes.
+It performs:
 
----
+1. Repository checkout.
+2. Node.js setup.
+3. Dependency installation.
+4. `package.json` validation.
+5. `sounds.json` validation.
+6. JavaScript syntax checking.
+7. Automated tests.
+8. VSIX packaging.
 
-## Creating a Release
-
-Update the version in:
+### Release Automation
 
 ```text
-package.json
+.github/workflows/release.yml
+```
+
+The release workflow is triggered by version tags:
+
+```text
+v*
 ```
 
 For example:
-
-```json
-"version": "0.0.4"
-```
-
-Commit the change:
-
-```bash
-git add package.json
-git commit -m "chore: bump version to 0.0.4"
-git push origin main
-```
-
-Create the Git tag:
 
 ```bash
 git tag v0.0.4
 git push origin v0.0.4
 ```
 
-GitHub Actions will automatically build and publish:
+The workflow verifies the version, runs checks and tests, builds the VSIX, creates a GitHub Release, and uploads the VSIX.
+
+## Versioning
+
+The project follows Semantic Versioning:
 
 ```text
-ssh-connection-sound-0.0.4.vsix
+MAJOR.MINOR.PATCH
 ```
 
----
+Example:
 
-## Manual Packaging
+```text
+0.0.4
+```
 
-You can always build the VSIX locally:
+Update `package.json` and `CHANGELOG.md` before creating a release.
+
+For example:
 
 ```bash
-vsce package
+git add package.json CHANGELOG.md
+git commit -m "chore: release v0.0.5"
+git push origin main
+
+git tag v0.0.5
+git push origin v0.0.5
 ```
 
-Inspect the files included in the package:
+The release workflow verifies that the Git tag and `package.json` version match.
+
+## Publishing to the VS Code Marketplace
+
+Install `vsce`:
 
 ```bash
-vsce ls
+npm install -g @vscode/vsce
 ```
 
-Install the generated package:
+Log in:
 
 ```bash
-code --install-extension ./ssh-connection-sound-0.0.3.vsix
+vsce login omarZACK
 ```
 
----
+Publish:
+
+```bash
+vsce publish
+```
+
+Extension identifier:
+
+```text
+omarZACK.ssh-connection-sound
+```
+
+For automated Marketplace publishing through GitHub Actions, configure a GitHub Actions secret named:
+
+```text
+VSCE_PAT
+```
+
+Do not commit the token to the repository.
+
+## Limitations
+
+### Remote-SSH failure detection
+
+The extension can detect transitions into a Remote-SSH environment through the public VS Code extension API.
+
+However, VS Code does not expose a stable public API containing every internal Remote-SSH connection failure event.
+
+Therefore:
+
+- Successful Remote-SSH connections can be detected.
+- Remote-SSH disconnections can be detected.
+- The failure sound can be tested manually.
+- Automatic detection of every possible SSH failure is not guaranteed.
+
+## Troubleshooting
+
+### No sound on Linux
+
+Check for an available audio player:
+
+```bash
+which paplay
+which aplay
+which ffplay
+which canberra-gtk-play
+```
+
+At least one should return a valid executable path.
+
+You can test a sound manually:
+
+```bash
+paplay /usr/share/sounds/freedesktop/stereo/complete.oga
+```
+
+### Sound file does not exist
+
+Check the configured path:
+
+```bash
+ls -l /path/to/sound.wav
+```
+
+For Linux fallback paths, the extension checks the configured `paths` entries and uses the first file that exists.
+
+### Test manually
+
+Use the Command Palette:
+
+```text
+SSH Connection Sound: Test Success Sound
+SSH Connection Sound: Test Failure Sound
+SSH Connection Sound: Test Disconnect Sound
+```
+
+### Reload configuration
+
+After modifying `sounds.json`:
+
+```text
+SSH Connection Sound: Reload Sounds
+```
+
+### Debugging
+
+Check:
+
+```text
+View → Output
+```
+
+and inspect the relevant extension output.
+
+You can also use:
+
+```text
+Help → Toggle Developer Tools
+```
+
+Look for messages beginning with:
+
+```text
+[SSH Connection Sound]
+```
+
+## Security Considerations
+
+The extension executes local audio playback commands depending on the operating system.
+
+It does not require a remote shell command to play audio.
+
+Custom sound paths should point only to files that you trust.
+
+On Linux it may invoke:
+
+```text
+paplay
+aplay
+ffplay
+canberra-gtk-play
+```
+
+On macOS:
+
+```text
+afplay
+```
+
+On Windows:
+
+```text
+powershell.exe
+```
+
+The Windows implementation validates system sound names before passing them to PowerShell.
+
+## Project Status
+
+Current version:
+
+```text
+0.0.4
+```
+
+Current functionality includes:
+
+- Remote-SSH connection detection.
+- Remote-SSH disconnect detection.
+- Success sound.
+- Disconnect sound.
+- Manual failure sound testing.
+- Cross-platform audio backends.
+- Custom sound configuration.
+- Configurable polling.
+- Automated tests.
+- VSIX packaging.
+- GitHub Actions CI.
+- Automated GitHub releases.
+
+## Contributing
+
+Contributions, bug reports, and feature requests are welcome.
+
+Before submitting a change, run:
+
+```bash
+npm install
+npm run check
+npm test
+npx vsce package
+```
+
+Ensure that all tests pass and that the generated VSIX contains only the files required by the extension.
 
 ## License
 
 This project is licensed under the MIT License.
 
-See [LICENSE](LICENSE) for details.
-
----
-
-## Repository
-
-GitHub:
-
-https://github.com/omarZACK/vscode-ssh-connection-sound
-
-Releases:
-
-https://github.com/omarZACK/vscode-ssh-connection-sound/releases
-
-Latest release:
-
-https://github.com/omarZACK/vscode-ssh-connection-sound/releases/latest
-
----
+See `LICENSE` for the complete license text.
 
 ## Author
 
@@ -658,3 +789,7 @@ https://github.com/omarZACK/vscode-ssh-connection-sound/releases/latest
 GitHub:
 
 https://github.com/omarZACK
+
+## Repository
+
+https://github.com/omarZACK/vscode-ssh-connection-sound
