@@ -1,74 +1,75 @@
 {
-  "name": "ssh-connection-sound",
-  "displayName": "SSH Connection Sound",
-  "description": "Plays sounds for Remote-SSH connection success, failure, and disconnect events.",
-  "version": "0.0.3",
-  "publisher": "omarZACK",
-  "license": "MIT",
-  "engines": {
-    "vscode": "^1.136.0"
-  },
-  "extensionKind": [
-    "ui"
-  ],
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onStartupFinished"
-  ],
-  "main": "./extension.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/omarZACK/vscode-ssh-connection-sound.git"
-  },
-  "bugs": {
-    "url": "https://github.com/omarZACK/vscode-ssh-connection-sound/issues"
-  },
-  "homepage": "https://github.com/omarZACK/vscode-ssh-connection-sound#readme",
-  "contributes": {
-    "configuration": {
-      "title": "SSH Connection Sound",
-      "properties": {
-        "sshConnectionSound.enabled": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable or disable SSH connection sounds."
-        },
-        "sshConnectionSound.soundsFile": {
-          "type": "string",
-          "default": "",
-          "description": "Optional path to a custom sounds.json file. Leave empty to use the sounds.json bundled with the extension."
-        },
-        "sshConnectionSound.pollInterval": {
-          "type": "number",
-          "default": 500,
-          "minimum": 100,
-          "description": "Polling interval in milliseconds for detecting Remote-SSH state changes."
-        }
-      }
+    "name": "ssh-connection-sound",
+    "displayName": "SSH Connection Sound",
+    "description": "Plays sounds for Remote-SSH connection success, failure, and disconnect events.",
+    "version": "0.0.3",
+    "publisher": "omarZACK",
+    "license": "MIT",
+    "icon": "icon.png",
+    "engines": {
+        "vscode": "^1.136.0"
     },
-    "commands": [
-      {
-        "command": "sshConnectionSound.testSuccess",
-        "title": "SSH Connection Sound: Test Success Sound"
-      },
-      {
-        "command": "sshConnectionSound.testFailure",
-        "title": "SSH Connection Sound: Test Failure Sound"
-      },
-      {
-        "command": "sshConnectionSound.testDisconnect",
-        "title": "SSH Connection Sound: Test Disconnect Sound"
-      },
-      {
-        "command": "sshConnectionSound.reloadSounds",
-        "title": "SSH Connection Sound: Reload Sounds"
-      }
-    ]
-  },
-  "scripts": {
-    "package": "vsce package",
-    "publish": "vsce publish"
-  }
+    "extensionKind": [
+        "ui"
+    ],
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "main": "./extension.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/omarZACK/vscode-ssh-connection-sound.git"
+    },
+    "bugs": {
+        "url": "https://github.com/omarZACK/vscode-ssh-connection-sound/issues"
+    },
+    "homepage": "https://github.com/omarZACK/vscode-ssh-connection-sound#readme",
+    "contributes": {
+        "configuration": {
+            "title": "SSH Connection Sound",
+            "properties": {
+                "sshConnectionSound.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable or disable SSH connection sounds."
+                },
+                "sshConnectionSound.soundsFile": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Optional path to a custom sounds.json file. Leave empty to use the sounds.json bundled with the extension."
+                },
+                "sshConnectionSound.pollInterval": {
+                    "type": "number",
+                    "default": 500,
+                    "minimum": 100,
+                    "description": "Polling interval in milliseconds for detecting Remote-SSH state changes."
+                }
+            }
+        },
+        "commands": [
+            {
+                "command": "sshConnectionSound.testSuccess",
+                "title": "SSH Connection Sound: Test Success Sound"
+            },
+            {
+                "command": "sshConnectionSound.testFailure",
+                "title": "SSH Connection Sound: Test Failure Sound"
+            },
+            {
+                "command": "sshConnectionSound.testDisconnect",
+                "title": "SSH Connection Sound: Test Disconnect Sound"
+            },
+            {
+                "command": "sshConnectionSound.reloadSounds",
+                "title": "SSH Connection Sound: Reload Sounds"
+            }
+        ]
+    },
+    "scripts": {
+        "package": "vsce package",
+        "publish": "vsce publish"
+    }
 }
