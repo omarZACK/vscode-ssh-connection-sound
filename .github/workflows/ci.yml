@@ -1,0 +1,44 @@
+name: CI
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+permissions:
+    contents: read
+
+jobs:
+    validate:
+        name: Validate Extension
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+
+            - name: Validate package.json
+              run: node -e "JSON.parse(require('fs').readFileSync('package.json', 'utf8')); console.log('package.json is valid')"
+
+            - name: Validate sounds.json
+              run: node -e "JSON.parse(require('fs').readFileSync('sounds.json', 'utf8')); console.log('sounds.json is valid')"
+
+            - name: Check extension.js syntax
+              run: node --check extension.js
+
+            - name: Install VSCE
+              run: npm install --global @vscode/vsce
+
+            - name: Package extension
+              run: vsce package
+
+            - name: Show VSIX
+              run: ls -lh *.vsix
